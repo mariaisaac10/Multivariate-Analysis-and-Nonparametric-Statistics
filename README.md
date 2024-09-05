@@ -17,9 +17,7 @@ Each lab folder typically contains:
   - `ggplot2`
   - `dplyr`
   - `cluster`
-  - `factoextra`
   - `MASS`
-  - `caret`
 
 You can install packages by running:
 ```r
