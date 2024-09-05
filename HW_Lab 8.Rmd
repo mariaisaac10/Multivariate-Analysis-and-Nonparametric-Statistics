@@ -1,0 +1,62 @@
+---
+title: "R Notebook"
+output:
+  html_document:
+    df_print: paged
+  html_notebook: default
+  pdf_document: default
+---
+
+
+```{r}
+ USHospitals <- read.table(file = "C:/Users/maria/Downloads/USHospitals.txt",
+ header = TRUE, row.names = 1)
+head(USHospitals)
+```
+
+
+```{r}
+USHospitals <- read.table(file = "C:/Users/maria/Downloads/USHospitals.txt",
+ header = TRUE, row.names = 1)
+cleaned = USHospitals[complete.cases(USHospitals),]
+USHPC <- princomp(cleaned)
+summary(USHPC)
+
+```
+
+```{r}
+ sapply(cleaned, sd)
+```
+
+```{r}
+USHospitals <- read.table(file = "C:/Users/maria/Downloads/USHospitals.txt",
+ header = TRUE, row.names = 1)
+cleaned = USHospitals[complete.cases(USHospitals),]
+USHPCc <- princomp(cleaned, cor = TRUE)
+summary(USHPCc)
+
+```
+
+```{r}
+USHPCc$loadings
+```
+
+
+```{r}
+ screeplot(USHPCc, col = "red", pch = 16,
+ type = "lines", cex = 2, lwd = 2, main = "")
+```
+
+```{R}
+biplot(USHPCc ,cor =TRUE)
+```
+
+### PC1 = PDeathN + HFDeathN - HADeathR - SDeathR
+
+### PC2 is dominated by the SplitR
+
+### LungR and ClotR are not correlated 
+
+### HADeathR and ClotR are negatively correlated 
+
+

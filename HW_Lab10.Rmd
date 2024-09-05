@@ -1,0 +1,142 @@
+---
+title: "HW_Lab10 Group3"
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
+---
+
+1. Analyze the mtcars data. The variables in the mtcars dataset
+that we consider as user features are cylinders, displacement,
+rear axle ratio (drat), forward gears, “v” or straight arrangement
+of the cylinders, and number of carburetors. Driver features are
+miles per gallon, horsepower, weight, 1/4 mile time(qt), and
+automatic or manual transmission.
+
+```{r, error=TRUE, message=FALSE,warning=FALSE}
+
+library(resampledata)
+data("mtcars")
+head(mtcars)
+user <- c(2, 5, 8,10, 11) # user
+driver <- c(1, 3,4,6,7,9) # drive
+mtcars[1, user]
+mtcars[1, driver]
+
+str(mtcars)
+dim(mtcars)
+
+
+```
+
+2. What is the correlation of the second canonical pair?
+
+The canonical pair are highly correlated, these correspond exactly to the first canonical correlation , which we can verify with the values correspond to the second and subsequent canonical correlations.   
+
+```{r, error=TRUE, message=FALSE,warning=FALSE}
+
+
+library(CCA) #  CCA package enhancement
+ccs <- cc(mtcars[ , user], mtcars[ , driver])  
+ccs$cor[1:5]
+
+
+usercc1  <- ccs$scores$xscores[ , 1]
+drivercc1 <- ccs$scores$yscores[ , 1]
+cor(usercc1,drivercc1)
+
+sdr <- sort(usercc1)
+sdr <- sdr[c(1, length(sdr) - 1)] # first and next-to-last
+ext <- match(sdr, usercc1)
+
+
+
+
+```
+
+
+3. Plot the first canonical pair/scores. Any interesting pattern or
+grouping in the plot?
+
+We see the canonical correlation scores correspond, Cadillac Fleetwood in one corner  closer to 1 and the others closer to -1. There is some evidence that there are groups of individual cars on this scale. The canonical correlation does not separate individuals well but identifies groups of variables that work together or against each other
+
+```{r,error=TRUE, message=FALSE,warning=FALSE}
+
+
+plot( usercc1, drivercc1, cex.lab = 1.5,
+      xlab = "x", 
+      ylab = "y",
+      pch = 16, cex = 1.5, col = "red", 
+      xlim = sdr * c(1.1, 1), frame.plot=FALSE)
+text(usercc1[ext], drivercc1[ext], 
+     labels = rownames(mtcars)[ext],
+     pos = c(1, 2), cex = .75, col = "blue")
+
+
+```
+
+
+4. Plot the variable weights. Interpret.
+
+
+The weights for the first two canonical correlations are plotted, red for user outcomes and blue for driver variables. Variables listed within the inner target have low weight and are generally not useful in performing the canonical correlation, which we do not see any variables in the inner target. All variables are in the significant target area, we see how canonical correlations can help identify groups of individuals, as in a factor analysis or clustering
+
+
+```{r, error=TRUE, message=FALSE,warning=FALSE}
+
+
+ccs$scores
+
+#usercc1  <- ccs$scores$xscores[ , 1]
+#drivercc1 <- ccs$scores$yscores[ , 1]
+
+plt.cc(ccs, d1 = 1, d2 = 2, type = "v", var.label = TRUE)
+
+
+
+```
+
+5. Is there really a correlation between the driver features and the
+user features?  
+
+There appears to be a significant correlation between these two sets of features. As the Wilks yield a statistic value of 0.006824275, with a mean statistic value of 0.3058138, based on 999 bootstrapped samples
+
+```{r, error=TRUE, message=FALSE,warning=FALSE}
+
+ library(CCP)
+p.perm(mtcars[ , user], mtcars[ , driver], nboot = 999, rhostart = 1)
+
+
+```
+
+
+
+6. Test Ho : ρ3 = 0 vs Ha : ρ3 ̸ = 0. Interpret results
+
+We reject the null at 5 percent. p-value is 8.043e the third carninoical pair is significantly not zero. The sample estimate is 0.558 is not due to chance.  
+
+```{r, error=TRUE, message=FALSE,warning=FALSE}
+
+usercc1  <- ccs$scores$xscores[ , 3] 
+drivercc1 <- ccs$scores$yscores[ , 3]
+cor.test(usercc1,drivercc1,method = "kendall")
+```
+
+
+7. Test Ho : ρ2 = ρ3 = · · · = ρp = 0 vs Ha: at least one is not
+zero. Interpret results. Does CCA make sense for this data? 
+
+Yes, because we tested that correlation exist in multivariate data using the features.
+
+
+```{r, error=TRUE, message=FALSE,warning=FALSE}
+
+
+ library(CCP)
+p.perm(mtcars[ , user], mtcars[ , driver], nboot = 999, rhostart = 2)
+
+
+```
+
+
+

@@ -1,0 +1,52 @@
+---
+title: "HW_Lab 9"
+output:
+  pdf_document: default
+  html_document: default
+date: "2024-04-03"
+---
+
+
+```{r}
+library(readr)
+burger <- read_table("C:/Users/maria/Downloads/Supp_2/burger.txt")
+ head(burger)
+```
+
+```{r}
+burger_subset <- burger[, -which(names(burger) == "Number")]
+```
+
+```{r}
+burger <- burger_subset
+colnames(burger) = c("CalFat", "Cal", "Fat", "SatFat", "Sodium", "Carbs", "Protein", na.omit = TRUE)
+ head(burger)
+
+```
+
+```{R}
+ fit = factanal(burger,3, rotation = "none") ; fit
+```
+
+```{r}
+ colSums(fit$loadings^2)
+```
+
+```{r}
+ fit2 = factanal(burger,3, rotation = "varimax"); fit2
+
+```
+
+```{r}
+ L = fit2$loadings; L; Psi = diag(fit$uniquenesses)
+
+```
+
+```{r}
+resids = cor(burger)- (L%*%t(L) + Psi) ; resids
+```
+
+### Factor 1 ~ CalFat / Cal / Fat / SatFat; factor ~ 2 Carbs
+### The p-value (0.699) is greater than the typical significance level of 0.05, we fail to reject the null hypothesis that three factors are sufficient to explain the underlying structure of the data.
+
+

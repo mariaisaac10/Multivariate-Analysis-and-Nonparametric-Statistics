@@ -1,0 +1,136 @@
+---
+title: "HW_LAB6 Group 3"
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
+---
+
+1. Visualize the Utility Data (Table 12.4, p688) of JW. Briefly
+describe your results
+
+With the complete linkage algorithm of similarities, you can see that the Utility Data are very similar within the companies however, because of the its based off distance each case that megers takes place at a different level. 
+
+If creating a graph with single points of the Utility Data, you will see that the negative and positive values can be very high or very low. There would be no correlation 
+
+
+
+2. Create a 2 × 2 matrix B and 2 × 1 vector b. Calculate by hand
+Bb, b′B, b′b, B′B. 
+```{r}
+library(htmltools)
+
+# Create HTML code to embed the image
+img_code <- img(src = "C:/Users/Iflor/OneDrive/Documents/STATS 5311/Lab6.jpg")
+
+# Display the image
+img_code
+```
+
+
+
+Verify your results using R.
+
+```{r}
+# Define B and b
+B <- matrix(c(9,24, 12, 33), nrow = 2, byrow = TRUE)
+b <- c(3,2)
+
+# Perform calculations
+Bb <- B %*% b
+Bb
+btB <- t(b) %*% B
+btB
+btb <- t(b) %*% b
+btb
+BtB <- t(B) %*% B
+BtB
+
+ 
+
+```
+
+3. Generate a vector of six N(0, 3) numbers. Find the Euclidean
+distance of this vector. Create a 3 × 2 matrix C from the above
+vector. Calculate by hand C′C. Verify your results using R.
+Find the i) (C′C)−1, ii) Det(C′C), iii) the eigenvalues and
+eigenvectors of C′C. Is C′C positive definite or non-negative
+definite? Verify if (C′C)1/2(C′C)1/2 ?
+= C′C
+
+```{r}
+
+set.seed(123)  
+vector <- rnorm(6, mean = 0, sd = 3)
+vector
+
+euclidean_distance <- sqrt(sum(vector^2))
+euclidean_distance
+
+C <- matrix(vector, nrow = 3, ncol = 2)
+C
+
+CtC <- t(C) %*% C
+CtC
+
+
+CtC_inverse <- solve(CtC)
+CtC_inverse
+
+
+
+det_CtC <- det(CtC)
+det_CtC
+
+
+eigen_CtC <- eigen(CtC)
+eigen_CtC$values  # Eigenvalues
+eigen_CtC$vectors  # Eigenvectors
+
+
+sqrt_CtC <- sqrt(CtC)
+sqrt_CtC %*% sqrt_CtC
+
+
+
+
+```
+
+4. Exercise 4.11 from DZ
+4.11 Let Z denote an arbitrary n × m matrix.
+(a) Show that Z'Z is symmetric.
+(b) Show that Z
+Z is nonnegative definite. Hint: If y = Zx then
+y
+y = x
+Z
+Zx .
+(c) Show that every eigenvalue of Z
+Z must be nonnegative. Hint:
+If λ is an eigenvalue with eigenvector x then Z
+Zx = λx . If we
+multiply on the left by x then we also have
+x
+Z
+Zx = λx
+x .
+
+```{r}
+
+
+library(htmltools)
+
+# Create HTML code to embed the image
+img_code <- img(src = "C:/Users/Iflor/OneDrive/Documents/STATS 5311/Lab6 Exercise 4.jpg")
+#C:\Users\Iflor\OneDrive\Documents\STATS 5311\Lab6 Exercise 4.jpg
+
+# Display the image
+img_code
+
+
+
+```
+
+
+
+
